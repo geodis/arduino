@@ -39,78 +39,37 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Setup");
 
-  //Binary notation as comment
-  // dataArray[0] = 0xFF; //0b11111111
-  // dataArray[1] = 0xFE; //0b11111110
-  // dataArray[2] = 0xFC; //0b11111100
-  // dataArray[3] = 0xF8; //0b11111000
-  // dataArray[4] = 0xF0; //0b11110000
-  // dataArray[5] = 0xE0; //0b11100000
-  // dataArray[6] = 0xC0; //0b11000000
-  // dataArray[7] = 0x80; //0b10000000
-  // dataArray[8] = 0x00; //0b00000000
+  Binary notation as comment
+  dataArray[0] = 0xFF; //0b11111111
+  dataArray[1] = 0xFE; //0b11111110
+  dataArray[2] = 0xFC; //0b11111100
+  dataArray[3] = 0xF8; //0b11111000
+  dataArray[4] = 0xF0; //0b11110000
+  dataArray[5] = 0xE0; //0b11100000
+  dataArray[6] = 0xC0; //0b11000000
+  dataArray[7] = 0x80; //0b10000000
+  dataArray[8] = 0x00; //0b00000000
 
-
-
-  dataArray[0] = 0x80;  // 10000000
-  dataArray[1] = 0x40;  // 01000000
-  dataArray[2] = 0x20;  // 00100000
-  dataArray[3] = 0x10;  // 00010000
-  dataArray[4] = 0x8;   // 00001000
-  dataArray[5] = 0x4;   // 00000100
-  dataArray[6] = 0x2;   // 00000010
-  dataArray[7] = 0x1;   // 00000001
-  // dataArray[9] = 0xE0; //0b11100000
-  //function that blinks all the LEDs
   //gets passed the number of blinks and the pause time
-
-  // blinkAll_2Bytes(2,500);
+  blinkAll_2Bytes(2,500);
 }
 
 void loop() {
 
   digitalWrite(latchPin, 0);
-  //move 'em out
-  // shiftOut(dataPin, clockPin, dataArray[5]);  
-  // digitalWrite(latchPin, 1);
   
-  for (int j = 0; j < 8; j++) {
-    
-    data = dataArray[j];
-    digitalWrite(latchPin, 0);
-    shiftOut(dataPin, clockPin, data);
+  for (int j = 0; j < 9; j++) {
+
+    data = dataArray[j];                //load the light sequence you want from array
+    digitalWrite(latchPin, 0);          //ground latchPin and hold low for as long as you are transmitting
+    shiftOut(dataPin, clockPin, data);  //move 'em out
+
+    //return the latch pin high to signal chip that it
+    //no longer needs to listen for information
     digitalWrite(latchPin, 1);
     delay(300);
+
   }
-  delay(2000);
-
-  // delay(2000);
-  
-  // digitalWrite(latchPin, 0);
-  // shiftOut(dataPin, clockPin, dataArray[5]);
-  // digitalWrite(latchPin, 1);
-
-  // delay(2000);
-  
-  // digitalWrite(latchPin, 0);
-  // shiftOut(dataPin, clockPin, dataArray[9]);
-  // digitalWrite(latchPin, 1);
-
-  // delay(2000);
-
-  // for (int j = 0; j < 10; j++) {
-  // for (int j = 0; j < 9; j++) {
-
-  //   data = dataArray[j];                //load the light sequence you want from array
-  //   digitalWrite(latchPin, 0);          //ground latchPin and hold low for as long as you are transmitting
-  //   shiftOut(dataPin, clockPin, data);  //move 'em out
-
-  //   //return the latch pin high to signal chip that it
-  //   //no longer needs to listen for information
-  //   digitalWrite(latchPin, 1);
-  //   delay(300);
-
-  // }
 }
 
 // the heart of the program
@@ -186,30 +145,3 @@ void blinkAll_2Bytes(int n, int d) {
     delay(d);
   }
 }
-
-
-// void setup()
-// {
-//     // Common lines:-
-//     Serial.begin(115200);
-//     byte val = 16;
-
-//     // 2124 program / 182 RAM:-
-//     for (int i = 0; i < 8; i++)
-//     {
-//         bool b = val & 0x80;
-//         Serial.print(b);
-//         val = val << 1;
-//     }
-
-//     // or
-
-//     // 2128 program / 182 RAM:-
-//     for (int i = 7; i >= 0; i--)
-//     {
-//         bool b = bitRead(val, i);
-//         Serial.print(b);
-//     }
-// }
-
-// void loop(){}
