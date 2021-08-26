@@ -39,7 +39,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Setup");
 
-  Binary notation as comment
+  // Binary notation as comment
   dataArray[0] = 0xFF; //0b11111111
   dataArray[1] = 0xFE; //0b11111110
   dataArray[2] = 0xFC; //0b11111100
