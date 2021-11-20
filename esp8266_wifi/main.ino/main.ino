@@ -51,14 +51,12 @@ void loop()
   while (true)
   {
     Serial.print("waiting ");
-    Serial.println(count);
-    count++;
-
+  
     int n = WiFi.scanNetworks();
     int power_percentage[n];
     String ssids[n];
-    String message;
-
+    
+    int top_power = 4;
     if (n == 0)
     {
       Serial.println("no networks found");
@@ -66,41 +64,38 @@ void loop()
     else
     {
       for (int i = 0; i < n; ++i)
-      {// String ssid = WiFi.SSID(i);
+      {
         ssids[i] = WiFi.SSID(i);
-        power_percentage[i] = dBmtoPercentage(WiFi.RSSI(i));
+        power_percentage[i] = dbm_to_percentage(WiFi.RSSI(i));
       }
+      
     }
-
     sort_values_by_key(power_percentage, ssids, n);
-
-    for (int i = 0; i < n; ++i)
-    {
-      message = ssids[i].substring(0, 15) + "-" + String(power_percentage[i]) + "%";
-      Serial.println(message);
+    
+    for (int a =0; a < n && a < top_power; a++){
+      Serial.print(ssids[a]);
+      Serial.print(" - ");
+      Serial.println(power_percentage[a]);
     }
-
     Serial.println("------------- 00 -------------");
-
+    
     delay(1500);
   }
 }
 
-void sort_values_by_key(int *key, String *values, int length)
+void sort_values_by_key(int key[], String values[], int length)
 {
 
   int i, j, flag = 1;
   int temp; 
   String temp2;
 
-  // for ( i = 1; ((i <= length)) && (flag == 1)); i++)
-  for ( i = 1; (i <= length && flag == 1); i++ )
+  for ( i = 0; (i < length && flag == 1); i++ )
   {
     flag = 0;
-    for (j = 0; j < (length - 1); j++)
-    {
-      if (key[j + 1] < key[j])
-      {
+
+    for (j = 0; j < (length -1); j++) {
+      if (key[j + 1] > key[j]) {
 
         temp = key[j];
         temp2 = values[j];
@@ -117,21 +112,15 @@ void sort_values_by_key(int *key, String *values, int length)
   }
 }
 
-int dBmtoPercentage(int dBm)
+int dbm_to_percentage(int dBm)
 {
   int quality;
-  if (dBm <= RSSI_MIN)
-  {
+  if (dBm <= RSSI_MIN) {
     quality = 0;
-  }
-  else if (dBm >= RSSI_MAX)
-  {
+  } else if (dBm >= RSSI_MAX) {
     quality = 100;
-  }
-  else
-  {
+  } else {
     quality = 2 * (dBm + 100);
   }
-
   return quality;
 }
