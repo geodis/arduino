@@ -50,6 +50,7 @@ void setup() {
   dataArray[7] = 0x80; //0b10000000
   dataArray[8] = 0x00; //0b00000000
 
+
   //gets passed the number of blinks and the pause time
   blinkAll_2Bytes(2,500);
 }

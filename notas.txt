@@ -1,0 +1,14 @@
+# 1. seleccionar el archivo que quiero subir al arduino: abajo en el vscode: "Sketch File"
+# 2 ctrl + alt + u: build && upload
+
+# debug: mirar la velocidad en setup() y configurarla en el minicom
+minicom -D /dev/ttyUSB0
+
+
+# 
+String m 
+Adafruit_SSD1306 d
+# 
+d.clearDisplay();
+d.write((char*)m.c_str());
+d.display();
