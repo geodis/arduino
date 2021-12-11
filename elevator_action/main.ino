@@ -59,7 +59,6 @@ void setup() {
   tft.fillScreen(Display_Backround_Color);
   tft.setTextColor(Display_Text_Color);
   tft.setTextSize(2);
-  delay(250);
   Serial.println("Setup done");
 }
 
@@ -76,21 +75,25 @@ void loop(){
     for (int i = 0; i < n; ++i) {
       ssids[i] = WiFi.SSID(i);
       power_percentage[i] = dbm_to_percentage(WiFi.RSSI(i));
+      reset_display();
     }
   }
   sort_values_by_key(power_percentage, ssids, n);
 
-  for (int a = 0; a < n && a < top_power; a++)
-  {
+  for (int a = 0; a < n && a < top_power; a++) {
     // Serial
     Serial.print(ssids[a]);
     Serial.print(" - ");
     Serial.println(power_percentage[a]);
     // ----------------------------------------------
     String m = ssids[a] + " - " + power_percentage[a];
-    displayMessage(m, (a*20));
-    delay(500);
+    display_message(m, (a*20), 0, 1);
   }
+
+  delay(5000);
+  reset_display();
+  display_message("Reseting...",0, Display_Color_Green, 2);
+  delay(1500);
   reset_display();
   Serial.println("------------- 00 -------------");
 }
@@ -99,11 +102,15 @@ void reset_display() {
   tft.fillScreen(ST77XX_BLACK);
 }
 
-void displayMessage(String m, int y_pos) {
+void display_message(String m, int y_pos, int color, int text_size) {
+
+  if (color == 0){
+    color = Display_Text_Color;
+  }
   tft.setTextWrap(false);
   tft.setCursor(0, y_pos);
-  tft.setTextColor(Display_Text_Color);
-  tft.setTextSize(1);
+  tft.setTextColor(color);
+  tft.setTextSize(text_size);
   tft.println(m);
 }
 
